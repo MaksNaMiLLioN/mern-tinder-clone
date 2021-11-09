@@ -1,20 +1,19 @@
-import { PersonRemoveTwoTone } from "@mui/icons-material";
-import { SwipeableDrawer } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TinderCard from "react-tinder-card";
 import "./TinderCards.css";
+import axios from "../axios";
 
 const TinderCards = () => {
-  const [people, setPeople] = useState([
-    {
-      name: "Sara",
-      url: "https://images.pexels.com/photos/899757/pexels-photo-899757.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
-    },
-    {
-      name: "Anna",
-      url: "https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
-    },
-  ]);
+  const [people, setPeople] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const req = await axios.get("/tinder/cards");
+      setPeople(req.data);
+    }
+    fetchData();
+  }, []);
+  console.log(people);
 
   const swiped = (direction, nameToDelete) => {
     console.log("removing: " + nameToDelete);
@@ -37,7 +36,7 @@ const TinderCards = () => {
           >
             <div
               style={{
-                backgroundImage: `url(${person.url})`,
+                backgroundImage: `url(${person.imgUrl})`,
               }}
               className="card"
             >
